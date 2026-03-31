@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lập Lá Số Tử Vi Online | Tử Vi Chuyên Sâu</title>
+  <meta name="description" content="Lập lá số tử vi online miễn phí, xem tử vi theo ngày giờ sinh, luận giải tổng quan và mở khóa phân tích AI chuyên sâu.">
+  <meta name="keywords" content="lá số tử vi, lập lá số tử vi, tử vi, xem tử vi, tử vi online, luận giải tử vi, lịch âm">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lập Lá Số Tử Vi Online | Tử Vi Chuyên Sâu">
+  <meta property="og:description" content="Lập lá số tử vi online miễn phí, xem tử vi theo ngày giờ sinh và mở khóa phân tích AI chuyên sâu.">
+  <meta property="og:image" content="img/icon-512.png">
+  <meta property="og:locale" content="vi_VN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lập Lá Số Tử Vi Online | Tử Vi Chuyên Sâu">
+  <meta name="twitter:description" content="Lập lá số tử vi online miễn phí, xem tử vi theo ngày giờ sinh và mở khóa phân tích AI chuyên sâu.">
+  <meta name="twitter:image" content="img/icon-512.png">
+  <link rel="canonical" href="/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tử vi chuyên sâu",
+    "url": "https://tuvichuyensau.io.vn/",
+    "inLanguage": "vi",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://tuvichuyensau.io.vn/#lap-la-so",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Lá số tử vi là gì?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lá số tử vi là bản đồ các cung và sao theo thời điểm sinh, dùng để luận giải xu hướng vận mệnh, tính cách, sự nghiệp và tình duyên."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Lập lá số tử vi online có cần giờ sinh chính xác không?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Có. Giờ sinh càng chính xác thì vị trí cung và sao càng đúng, từ đó kết quả luận giải tử vi đáng tin cậy hơn."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Gói Premium có gì khác gói miễn phí?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Gói miễn phí hỗ trợ gen lá số và tổng quan cơ bản. Gói Premium mở khóa phân tích AI chuyên sâu cho các tab luận mệnh, sao, sự nghiệp, tình duyên, sức khỏe và vận hạn."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <div class="stars-bg"></div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" data-tab="lap-la-so">
+        <div class="nav-logo-icon" aria-hidden="true"></div>
+        <span class="nav-logo-text">Tử vi chuyên sâu</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#" class="active" data-tab="lap-la-so">Lập lá số</a></li>
+        <li><a href="#" data-tab="lich-am">Lịch Âm</a></li>
+        <li><a href="#" data-tab="bang-gia">Bảng giá</a></li>
+        <li><a href="#" data-tab="gioi-thieu">Giới thiệu</a></li>
+        <li><a href="#" class="nav-cta" data-tab="lap-la-so">Xem ngay</a></li>
+      </ul>
+      <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <section id="lap-la-so" class="tab-panel active">
+  <div class="page-header reveal">
+    <h1>Lập Lá Số <span class="gradient-text">Tử Vi</span></h1>
+    <p>Nhập thông tin sinh nhật để AI phân tích lá số tử vi chi tiết cho bạn</p>
+  </div>
+
+  <div class="tuvi-form-container reveal">
+    <form id="tuvi-form" class="glass-card" style="padding: 1.6rem;">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="user-name">Họ và tên</label>
+          <input type="text" id="user-name" placeholder="Nhập họ tên của bạn" required>
+        </div>
+
+        <div class="form-group">
+          <label for="calendar-type">Loại lịch</label>
+          <select id="calendar-type">
+            <option value="solar">Dương lịch</option>
+            <option value="lunar">Âm lịch</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="birth-date">Ngày sinh (Dương lịch)</label>
+          <input type="date" id="birth-date" required min="1940-01-01" max="2030-12-31">
+        </div>
+
+        <div class="form-group">
+          <label for="birth-hour">Giờ sinh</label>
+          <select id="birth-hour" required>
+            <option value="">-- Chọn giờ --</option>
+            <option value="0">00 giờ</option>
+            <option value="1">01 giờ</option>
+            <option value="2">02 giờ</option>
+            <option value="3">03 giờ</option>
+            <option value="4">04 giờ</option>
+            <option value="5">05 giờ</option>
+            <option value="6">06 giờ</option>
+            <option value="7">07 giờ</option>
+            <option value="8">08 giờ</option>
+            <option value="9">09 giờ</option>
+            <option value="10">10 giờ</option>
+            <option value="11">11 giờ</option>
+            <option value="12" selected>12 giờ</option>
+            <option value="13">13 giờ</option>
+            <option value="14">14 giờ</option>
+            <option value="15">15 giờ</option>
+            <option value="16">16 giờ</option>
+            <option value="17">17 giờ</option>
+            <option value="18">18 giờ</option>
+            <option value="19">19 giờ</option>
+            <option value="20">20 giờ</option>
+            <option value="21">21 giờ</option>
+            <option value="22">22 giờ</option>
+            <option value="23">23 giờ</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="birth-minute">Phút sinh</label>
+          <select id="birth-minute" required>
+            <option value="0">00 phút</option>
+            <option value="5">05 phút</option>
+            <option value="10">10 phút</option>
+            <option value="15">15 phút</option>
+            <option value="20">20 phút</option>
+            <option value="25">25 phút</option>
+            <option value="30" selected>30 phút</option>
+            <option value="35">35 phút</option>
+            <option value="40">40 phút</option>
+            <option value="45">45 phút</option>
+            <option value="50">50 phút</option>
+            <option value="55">55 phút</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="timezone">Múi giờ</label>
+          <select id="timezone" required>
+            <option value="7" selected>GMT+7 (Việt Nam)</option>
+            <option value="0">GMT+0</option>
+            <option value="8">GMT+8</option>
+            <option value="9">GMT+9</option>
+            <option value="-5">GMT-5</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="gender">Giới tính</label>
+          <select id="gender" required>
+            <option value="">-- Chọn giới tính --</option>
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="view-year">Năm xem</label>
+          <select id="view-year" required>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026" selected>2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="view-month">Tháng xem (Âm lịch)</label>
+          <select id="view-month" required>
+            <option value="1">Tháng 1</option>
+            <option value="2" selected>Tháng 2</option>
+            <option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option>
+            <option value="5">Tháng 5</option>
+            <option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option>
+            <option value="8">Tháng 8</option>
+            <option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option>
+            <option value="11">Tháng 11</option>
+            <option value="12">Tháng 12</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <button type="submit" class="btn-submit">
+            ✦ Lập Lá Số Tử Vi
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <section class="section package-upgrade-section reveal" style="padding-top: 0;">
+    <div class="section-inner">
+      <div class="section-header package-upgrade-header">
+        <h2>Mở rộng trải nghiệm với <span class="gradient-text">gói phân tích</span></h2>
+        <p>Nhận nội dung có cấu trúc rõ ràng, luận giải sâu và hành động cụ thể theo từng giai đoạn</p>
+      </div>
+      <div class="features-grid package-upgrade-grid">
+        <div class="glass-card feature-card package-upgrade-card">
+          <div class="feature-icon gold">📌</div>
+          <h3>Trong gói phân tích có gì?</h3>
+          <p>Luận giải 12 cung theo trọng tâm và mối liên hệ sao chính - sao phụ.</p>
+          <p>Diễn giải Đại Vận/Tiểu Hạn theo năm xem kèm checklist hành động.</p>
+          <p class="package-upgrade-note">Phù hợp khi bạn cần bức tranh đầy đủ để ra quyết định thực tế.</p>
+        </div>
+        <div class="glass-card feature-card package-upgrade-card">
+          <div class="feature-icon blue">⚡</div>
+          <h3>Điểm mạnh của AI phân tích dữ liệu</h3>
+          <p>AI xử lý nhanh nhiều biến số cùng lúc và chuẩn hóa cách luận để giảm cảm tính.</p>
+          <p>Làm rõ mẫu vận trình mà người đọc thủ công dễ bỏ sót.</p>
+          <p class="package-upgrade-note">Kết quả nhất quán, dễ đối chiếu và dễ theo dõi tiến triển theo năm.</p>
+        </div>
+        <div class="glass-card feature-card package-upgrade-card package-upgrade-cta-card">
+          <div class="feature-icon green">🚀</div>
+          <h3>Nâng cấp để xem chuyên sâu</h3>
+          <p>Mở toàn bộ nội dung phân tích chuyên sâu, xem vận hạn chi tiết hơn và nhận ưu tiên cập nhật tính năng mới.</p>
+          <div class="package-upgrade-cta-wrap">
+            <a href="#" data-tab="bang-gia" class="btn-primary">Nâng cấp gói ngay</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="loading-overlay">
+    <div style="text-align:center">
+      <div class="loading-spinner"></div>
+      <p style="margin-top:1.5rem;color:var(--accent-gold);font-weight:500;">AI đang phân tích lá số...</p>
+    </div>
+  </div>
+
+  <div class="tuvi-result">
+    <div class="chart-title-bar">
+      <h2>Tổng quan lá số</h2>
+      <button class="chart-title-btn" onclick="window.print()">🖨️ In lá số</button>
+    </div>
+
+    <div class="chart-container" id="tuvi-chart"></div>
+
+    <div class="ai-analysis">
+      <div class="section-header" style="margin-bottom:1.5rem;">
+        <h2>Luận Giải <span class="gradient-text">AI</span></h2>
+        <p>Phân tích chi tiết bởi trí tuệ nhân tạo</p>
+      </div>
+
+      <div class="analysis-tabs">
+        <button class="analysis-tab active" data-panel="panel-overview">Tổng quan</button>
+        <button class="analysis-tab" data-panel="panel-menh">Luận Mệnh</button>
+        <button class="analysis-tab" data-panel="panel-stars">Luận Sao</button>
+        <button class="analysis-tab" data-panel="panel-career">Sự nghiệp & Tài chính</button>
+        <button class="analysis-tab" data-panel="panel-love">Tình duyên & Gia đình</button>
+        <button class="analysis-tab" data-panel="panel-health">Sức khỏe & Đời sống</button>
+        <button class="analysis-tab" data-panel="panel-fortune">Vận hạn</button>
+      </div>
+
+      <div class="analysis-content">
+        <div class="analysis-panel active" id="panel-overview"></div>
+        <div class="analysis-panel" id="panel-menh"></div>
+        <div class="analysis-panel" id="panel-stars"></div>
+        <div class="analysis-panel" id="panel-career"></div>
+        <div class="analysis-panel" id="panel-love"></div>
+        <div class="analysis-panel" id="panel-health"></div>
+        <div class="analysis-panel" id="panel-fortune"></div>
+      </div>
+    </div>
+
+    <div style="height:1rem;"></div>
+  </div>
+
+</section>
+
+  <section id="lich-am" class="section reveal tab-panel" style="padding-top: 2rem;">
+    <div class="section-inner">
+      <div class="section-header lunar-header-compact">
+        <h2>Tra Cứu <span class="gradient-text">Lịch Âm</span></h2>
+        <p>Đổi ngày dương lịch sang âm lịch, xem can chi và thông tin lịch vạn niên theo ngày</p>
+      </div>
+      <div class="glass-card lunar-lookup-card">
+        <div class="lunar-lookup-grid">
+          <div class="form-group">
+            <label for="duong-date">Ngày dương lịch</label>
+            <input type="date" id="duong-date" min="1940-01-01" max="2030-12-31">
+          </div>
+          <div class="form-group">
+            <label for="duong-hour">Giờ</label>
+            <select id="duong-hour">
+              <option value="12" selected>12</option>
+              <option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option>
+              <option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option>
+              <option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option>
+              <option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
+              <option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+              <option value="21">21</option><option value="22">22</option><option value="23">23</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="duong-minute">Phút</label>
+            <select id="duong-minute">
+              <option value="0" selected>00</option>
+              <option value="15">15</option>
+              <option value="30">30</option>
+              <option value="45">45</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lookup-btn">&nbsp;</label>
+            <button id="lookup-btn" class="btn-submit" type="button">Tra cứu lịch âm</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="section lunar-result-section" style="padding-top:1rem;">
+        <div class="section-inner">
+          <div class="section-header lunar-header-compact">
+            <h2 id="lunar-title">Lịch âm ngày 24 tháng 5 năm 2001</h2>
+            <p id="lunar-subtitle">Lịch vạn niên chi tiết theo ngày dương lịch đã chọn</p>
+          </div>
+
+          <div class="lunar-summary-grid">
+            <div class="glass-card lunar-summary-card">
+              <h3>Dương lịch</h3>
+              <p id="duong-summary">24-05-2001</p>
+            </div>
+            <div class="glass-card lunar-summary-card">
+              <h3>Âm lịch</h3>
+              <p id="am-summary">02-04-2001 (nhuận)</p>
+            </div>
+            <div class="glass-card lunar-summary-card">
+              <h3>Can Chi</h3>
+              <p id="canchi-summary">Ngày Đinh Hợi, tháng Quý Tỵ, năm Tân Tỵ</p>
+            </div>
+          </div>
+
+          <div class="glass-card lunar-table-card">
+            <h3>Chi tiết âm dương lịch ngày</h3>
+            <table class="lunar-detail-table">
+              <thead>
+                <tr><th>DƯƠNG LỊCH</th><th>ÂM LỊCH</th></tr>
+              </thead>
+              <tbody>
+                <tr><td id="tbl-duong-month">Tháng 5 năm 2001</td><td id="tbl-am-month">Tháng 4 (nhuận) năm 2001</td></tr>
+                <tr><td id="tbl-duong-day">Ngày 24</td><td id="tbl-am-day">Ngày 2</td></tr>
+                <tr><td id="tbl-weekday">Thứ Năm</td><td id="tbl-canchi">Ngày Đinh Hợi, tháng Quý Tỵ, năm Tân Tỵ</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="lunar-two-col">
+            <div class="glass-card">
+              <h3>Giờ hoàng đạo</h3>
+              <p id="good-hours">Sửu (1-3), Thìn (7-9), Ngọ (11-13), Mùi (13-15), Tuất (19-21), Hợi (21-23)</p>
+            </div>
+            <div class="glass-card">
+              <h3>Giờ hắc đạo</h3>
+              <p id="bad-hours">Tý (23-1), Dần (3-5), Mão (5-7), Tỵ (9-11), Thân (15-17), Dậu (17-19)</p>
+            </div>
+          </div>
+
+          <div class="glass-card lunar-table-card">
+            <h3>Bảng lịch tháng</h3>
+            <div id="month-calendar" class="month-calendar-grid"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section id="bang-gia" class="section reveal tab-panel" style="padding-top: 0;">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Các Gói <span class="gradient-text">Nạp Xu</span></h2>
+        <p>Chọn gói phù hợp để trải nghiệm luận giải tử vi chuyên sâu</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="glass-card pricing-card reveal">
+          <div class="pricing-coins">MIỄN PHÍ</div><div class="pricing-price">0<span class="currency">đ</span></div><div class="pricing-desc">Trải nghiệm cơ bản</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Gen lá số tử vi</li><li><span class="check">✓</span> Phân tích tổng quan cơ bản</li>
+          </ul>
+          <a class="btn-pricing outline" href="#lap-la-so">Bắt đầu miễn phí</a>
+        </div>
+        <div class="glass-card pricing-card popular reveal">
+          <div class="pricing-coins">GÓI PREMIUM</div><div class="pricing-price">99K<span class="currency">đ</span></div><div class="pricing-desc">Phân tích AI chuyên sâu</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Bao gồm toàn bộ quyền lợi gói miễn phí</li><li><span class="check">✓</span> Mở khóa toàn bộ tab phân tích AI</li><li><span class="check">✓</span> Luận giải chuyên sâu 12 cung</li><li><span class="check">✓</span> Phân tích vận hạn, sự nghiệp, tình duyên, sức khỏe chi tiết</li>
+          </ul>
+          <button class="btn-pricing primary">Nạp ngay</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gioi-thieu" class="section reveal tab-panel" style="padding-top: 0;">
+    <div class="about-content">
+      <div class="section-header">
+        <h2>Giới Thiệu <span class="gradient-text">Tử vi chuyên sâu</span></h2>
+        <p>Tiên phong kết hợp triết lý phương Đông với trí tuệ nhân tạo</p>
+      </div>
+      <div class="about-section glass-card reveal">
+        <h3>🌟 Sứ mệnh của chúng tôi</h3>
+        <p>Tử vi chuyên sâu ra đời với sứ mệnh mang khoa học Tử Vi truyền thống Việt Nam đến gần hơn với mọi người thông qua công nghệ trí tuệ nhân tạo.</p>
+      </div>
+      <div class="about-values">
+        <div class="glass-card value-card reveal"><div class="value-icon">🎯</div><h4>Chính xác</h4><p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Thuật toán tính toán chính xác đến từng phút sinh, đảm bảo kết quả đáng tin cậy.</p></div>
+        <div class="glass-card value-card reveal"><div class="value-icon">🔒</div><h4>Bảo mật</h4><p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Thông tin cá nhân được bảo vệ tuyệt đối với công nghệ mã hóa tiên tiến.</p></div>
+        <div class="glass-card value-card reveal"><div class="value-icon">💡</div><h4>Dễ hiểu</h4><p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Luận giải rõ ràng, dễ hiểu cho cả người mới tìm hiểu tử vi.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="margin-top:2rem;">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" data-tab="lap-la-so">
+          <div class="nav-logo-icon" aria-hidden="true"></div>
+          <span class="nav-logo-text">Tử vi chuyên sâu</span>
+        </a>
+        <p>Nền tảng xem và luận giải tử vi bằng trí tuệ nhân tạo hàng đầu Việt Nam.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Tính năng</h4>
+        <a href="#" data-tab="lap-la-so">Lập lá số</a>
+        <a href="#" data-tab="lich-am">Lịch âm</a>
+        <a href="#" data-tab="bang-gia">Nâng cấp Premium</a>
+      </div>
+      <div class="footer-column">
+        <h4>Công ty</h4>
+        <a href="#" data-tab="gioi-thieu">Giới thiệu</a>
+        <a href="#" data-tab="bang-gia">Bảng giá</a>
+        <a href="#">Liên hệ</a>
+      </div>
+      <div class="footer-column">
+        <h4>Hỗ trợ</h4>
+        <a href="#">Hướng dẫn</a>
+        <a href="#">Câu hỏi thường gặp</a>
+        <a href="https://zalo.me/0917389458" target="_blank" rel="noopener noreferrer">Chat Zalo hỗ trợ</a>
+        <a href="#">Điều khoản</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Tử vi chuyên sâu. All rights reserved.</span>
+      <span>Made with ✦ in Vietnam</span>
+    </div>
+  </footer>
+
+  <a
+    href="https://zalo.me/0917389458"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="zalo-float-bubble"
+    aria-label="Chat Zalo hỗ trợ"
+  >
+    <span class="zalo-float-icon">Zalo</span>
+    <span class="zalo-float-text">Hỗ trợ</span>
+  </a>
+
+  <script src="js/vendor/lunar-javascript.js"></script>
+  <script src="js/tuvi-engine.js"></script>
+  <script src="js/tuvi-analysis.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/lich-am.js"></script>
+</body>
+</html>
