@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initTuViForm();
   initAnalysisTabs();
+  initConsentAndAds();
   initEngagementTracking();
   trackEvent('site_ready', { page_type: 'single_page_tuvi' });
 });
@@ -21,6 +22,8 @@ const engagementState = {
   firedDepths: new Set(),
   initialized: false
 };
+const ADSENSE_CLIENT = 'ca-pub-3768293456715441';
+let adsenseLoaded = false;
 
 function trackEvent(eventName, params = {}) {
   try {
@@ -34,6 +37,85 @@ function trackEvent(eventName, params = {}) {
   } catch (e) {
     // Ignore tracking failures
   }
+}
+
+function loadAdsenseScript() {
+  if (adsenseLoaded || document.querySelector('script[data-adsense-loader="1"]')) return;
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+  script.crossOrigin = 'anonymous';
+  script.setAttribute('data-adsense-loader', '1');
+  script.onload = () => {
+    adsenseLoaded = true;
+    trackEvent('adsense_script_loaded');
+    initAdSlots();
+  };
+  script.onerror = () => trackEvent('adsense_script_error');
+  document.head.appendChild(script);
+}
+
+function initAdSlots() {
+  const slotNodes = document.querySelectorAll('.adsbygoogle[data-ad-client]');
+  if (!slotNodes.length) return;
+  slotNodes.forEach((node) => {
+    if (node.dataset.adInitialized === '1') return;
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      node.dataset.adInitialized = '1';
+      trackEvent('ad_slot_request', { slot: node.getAttribute('data-ad-slot') || 'auto' });
+    } catch (e) {
+      trackEvent('ad_slot_error', { slot: node.getAttribute('data-ad-slot') || 'auto' });
+    }
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const slot = entry.target.getAttribute('data-ad-slot') || 'auto';
+        trackEvent('ad_slot_view', { slot });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  slotNodes.forEach((node) => observer.observe(node));
+}
+
+function applyConsentMode(choice) {
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adsbygoogle.requestNonPersonalizedAds = choice === 'granted' ? 0 : 1;
+}
+
+function initConsentAndAds() {
+  const banner = document.getElementById('consent-banner');
+  if (!banner) {
+    // If banner is not present, load ads in non-personalized mode for safety.
+    applyConsentMode('denied');
+    loadAdsenseScript();
+    return;
+  }
+
+  const saved = localStorage.getItem('ads_consent_choice');
+  const acceptBtn = document.getElementById('consent-accept');
+  const rejectBtn = document.getElementById('consent-reject');
+
+  const activate = (choice) => {
+    localStorage.setItem('ads_consent_choice', choice);
+    applyConsentMode(choice);
+    banner.classList.remove('show');
+    trackEvent('consent_update', { ads_consent: choice });
+    loadAdsenseScript();
+  };
+
+  if (saved === 'granted' || saved === 'denied') {
+    activate(saved);
+  } else {
+    banner.classList.add('show');
+    trackEvent('consent_banner_view');
+  }
+
+  if (acceptBtn) acceptBtn.addEventListener('click', () => activate('granted'));
+  if (rejectBtn) rejectBtn.addEventListener('click', () => activate('denied'));
 }
 
 function getOrCreateClientId() {
