@@ -24,14 +24,55 @@ const engagementState = {
 
 function trackEvent(eventName, params = {}) {
   try {
-    if (typeof window.gtag === 'function') {
+    if (typeof window.gtag === 'function' && window.__gaLoaded) {
       window.gtag('event', eventName, params);
     } else {
+      sendGaCollectFallback(eventName, params);
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: eventName, ...params });
+      window.dataLayer.push({ event: eventName, transport: 'fallback', ...params });
     }
   } catch (e) {
     // Ignore tracking failures
+  }
+}
+
+function getOrCreateClientId() {
+  const key = 'ga_fallback_cid';
+  let cid = '';
+  try {
+    cid = window.localStorage.getItem(key) || '';
+    if (!cid) {
+      cid = `${Math.floor(Math.random() * 1e10)}.${Date.now()}`;
+      window.localStorage.setItem(key, cid);
+    }
+  } catch (e) {
+    cid = `${Math.floor(Math.random() * 1e10)}.${Date.now()}`;
+  }
+  return cid;
+}
+
+function sendGaCollectFallback(eventName, params = {}) {
+  const tid = window.__GA_MEASUREMENT_ID || 'G-9TW02BVZDR';
+  const cid = getOrCreateClientId();
+  const payload = new URLSearchParams({
+    v: '2',
+    tid,
+    cid,
+    en: eventName
+  });
+  Object.entries(params || {}).forEach(([k, v]) => {
+    if (v === undefined || v === null) return;
+    payload.append(`ep.${String(k)}`, String(v));
+  });
+  const url = `https://www.google-analytics.com/g/collect?${payload.toString()}`;
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url);
+    } else {
+      fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
+    }
+  } catch (e) {
+    // Ignore fallback failures
   }
 }
 

@@ -22,7 +22,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9TW02BVZDR"></script>
+  <script>
+    window.__GA_MEASUREMENT_ID = 'G-9TW02BVZDR';
+    window.__gaLoaded = false;
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9TW02BVZDR" onload="window.__gaLoaded=true" onerror="window.__gaLoaded=false"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
