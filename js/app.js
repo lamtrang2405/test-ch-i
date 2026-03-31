@@ -40,6 +40,12 @@ function trackEvent(eventName, params = {}) {
 }
 
 function loadAdsenseScript() {
+  const existing = document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+  if (existing) {
+    adsenseLoaded = true;
+    initAdSlots();
+    return;
+  }
   if (adsenseLoaded || document.querySelector('script[data-adsense-loader="1"]')) return;
   const script = document.createElement('script');
   script.async = true;
@@ -106,6 +112,9 @@ function initConsentAndAds() {
     trackEvent('consent_update', { ads_consent: choice });
     loadAdsenseScript();
   };
+
+  // Always attempt to use the static AdSense script if present.
+  loadAdsenseScript();
 
   if (saved === 'granted' || saved === 'denied') {
     activate(saved);
