@@ -8,10 +8,42 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initTuViForm();
   initAnalysisTabs();
+  initEngagementTracking();
+  trackEvent('site_ready', { page_type: 'single_page_tuvi' });
 });
 
 let premiumNotiStarted = false;
 let premiumNotiIntervalId = null;
+const engagementState = {
+  activeTab: 'lap-la-so',
+  tabEnterAt: Date.now(),
+  maxScrollPct: 0,
+  firedDepths: new Set(),
+  initialized: false
+};
+
+function trackEvent(eventName, params = {}) {
+  try {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, params);
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: eventName, ...params });
+    }
+  } catch (e) {
+    // Ignore tracking failures
+  }
+}
+
+// Call this from payment success callback/webhook bridge when available.
+window.trackPurchaseSuccess = function trackPurchaseSuccess(amount, plan = 'premium_99k', method = 'unknown') {
+  trackEvent('purchase_success', {
+    value: Number(amount) || 99000,
+    currency: 'VND',
+    plan_name: plan,
+    payment_method: method
+  });
+};
 
 function startPremiumFakeNotifications() {
   if (premiumNotiStarted) return;
@@ -44,6 +76,7 @@ function showPremiumToast(message) {
   toast.className = 'premium-fake-noti';
   toast.textContent = message;
   host.appendChild(toast);
+  trackEvent('premium_noti_show', { message_type: 'social_proof' });
 
   requestAnimationFrame(() => toast.classList.add('show'));
 
@@ -51,6 +84,40 @@ function showPremiumToast(message) {
     toast.classList.remove('show');
     window.setTimeout(() => toast.remove(), 300);
   }, 4500);
+}
+
+function initEngagementTracking() {
+  if (engagementState.initialized) return;
+  engagementState.initialized = true;
+
+  const depthMarks = [25, 50, 75, 90];
+  const currentScrollPct = () => {
+    const doc = document.documentElement;
+    const total = Math.max(0, doc.scrollHeight - window.innerHeight);
+    if (total <= 0) return 100;
+    return Math.min(100, Math.round((window.scrollY / total) * 100));
+  };
+
+  window.addEventListener('scroll', () => {
+    const pct = currentScrollPct();
+    if (pct > engagementState.maxScrollPct) engagementState.maxScrollPct = pct;
+    depthMarks.forEach(mark => {
+      const key = `${engagementState.activeTab}:${mark}`;
+      if (pct >= mark && !engagementState.firedDepths.has(key)) {
+        engagementState.firedDepths.add(key);
+        trackEvent('scroll_depth', { tab_name: engagementState.activeTab, depth_percent: mark });
+      }
+    });
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      const secs = Math.max(1, Math.round((Date.now() - engagementState.tabEnterAt) / 1000));
+      trackEvent('time_on_tab', { tab_name: engagementState.activeTab, seconds_spent: secs });
+    } else if (document.visibilityState === 'visible') {
+      engagementState.tabEnterAt = Date.now();
+    }
+  });
 }
 
 function initStarsBackground() {
@@ -116,6 +183,15 @@ function initNavigation() {
     if (updateHash) {
       history.replaceState(null, '', `#${tabId}`);
     }
+    const spentSecs = Math.max(1, Math.round((Date.now() - engagementState.tabEnterAt) / 1000));
+    trackEvent('time_on_tab', { tab_name: engagementState.activeTab, seconds_spent: spentSecs });
+    engagementState.activeTab = tabId;
+    engagementState.tabEnterAt = Date.now();
+    engagementState.maxScrollPct = 0;
+    trackEvent('tab_view', { tab_name: tabId });
+    if (tabId === 'bang-gia') {
+      trackEvent('premium_view', { source: 'tab_navigation' });
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -128,6 +204,7 @@ function initNavigation() {
 
   const hashTab = (window.location.hash || '').replace('#', '');
   if (hashTab) activateTab(hashTab, false);
+  else trackEvent('tab_view', { tab_name: engagementState.activeTab });
 }
 
 function initScrollAnimations() {
@@ -192,6 +269,7 @@ function initTuViForm() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    trackEvent('generate_chart_submit');
     calculateAndDisplay();
   });
 }
@@ -240,9 +318,16 @@ function calculateAndDisplay() {
         result.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+      trackEvent('generate_chart_success', {
+        calendar_type: isLunar ? 'lunar' : 'solar',
+        gender: gender,
+        view_year: viewYear,
+        view_month: viewMonth
+      });
       startPremiumFakeNotifications();
     } catch (err) {
       console.error('Calculation error:', err);
+      trackEvent('generate_chart_error', { reason: 'calculation_exception' });
       alert('Có lỗi xảy ra khi tính toán. Vui lòng kiểm tra lại thông tin nhập.');
     } finally {
       if (loading) loading.classList.remove('active');
@@ -433,6 +518,7 @@ function renderAnalysis(data) {
           const unlockBtn = lock.querySelector('.analysis-unlock-btn');
           if (unlockBtn) {
             unlockBtn.addEventListener('click', () => {
+              trackEvent('premium_unlock_click', { source: 'analysis_lock_overlay' });
               const pricingTab = document.querySelector('.nav-links [data-tab="bang-gia"]');
               if (pricingTab) pricingTab.click();
             });
@@ -527,6 +613,20 @@ function initAnalysisTabs() {
       e.target.classList.add('active');
       const targetPanel = document.getElementById(e.target.dataset.panel);
       if (targetPanel) targetPanel.classList.add('active');
+      trackEvent('analysis_tab_click', { panel: e.target.dataset.panel || '' });
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a,button');
+    if (!link) return;
+
+    if (link.matches('a[href*="zalo.me/0917389458"]')) {
+      trackEvent('zalo_support_click', { placement: 'floating_or_footer' });
+    }
+
+    if (link.matches('.btn-pricing.primary, .btn-pricing.outline, [data-tab="bang-gia"]')) {
+      trackEvent('pricing_cta_click', { text: (link.textContent || '').trim() });
     }
   });
 }
