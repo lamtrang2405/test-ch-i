@@ -127,6 +127,40 @@ function initConsentAndAds() {
   if (rejectBtn) rejectBtn.addEventListener('click', () => activate('denied'));
 }
 
+function showInterstitialOnGenerate(done) {
+  const modal = document.getElementById('interstitial-ad-modal');
+  const closeBtn = document.getElementById('interstitial-ad-close');
+  if (!modal || !adsenseLoaded) {
+    done();
+    return;
+  }
+
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    done();
+  };
+
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  trackEvent('interstitial_show', { placement: 'generate_chart_click' });
+
+  const onClose = () => {
+    trackEvent('interstitial_close_click');
+    closeBtn?.removeEventListener('click', onClose);
+    finish();
+  };
+  closeBtn?.addEventListener('click', onClose);
+
+  window.setTimeout(() => {
+    closeBtn?.removeEventListener('click', onClose);
+    finish();
+  }, 2200);
+}
+
 function getOrCreateClientId() {
   const key = 'ga_fallback_cid';
   let cid = '';
@@ -402,7 +436,7 @@ function initTuViForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     trackEvent('generate_chart_submit');
-    calculateAndDisplay();
+    showInterstitialOnGenerate(() => calculateAndDisplay());
   });
 }
 
