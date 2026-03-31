@@ -1572,43 +1572,8 @@ h1, h2, h3, h4 { font-family: -apple-system, 'SF Pro Display', 'Inter', 'Segoe U
 }
 
 .ad-block-top {
-  max-width: 520px;
+  max-width: 860px;
   margin: 0 auto;
-}
-
-.interstitial-ad-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 140;
-  background: rgba(0, 0, 0, 0.56);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.interstitial-ad-modal.show {
-  display: flex;
-}
-
-.interstitial-ad-inner {
-  width: min(92vw, 860px);
-  background: #fff;
-  border-radius: 12px;
-  padding: 0.9rem;
-  position: relative;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
-}
-
-.interstitial-ad-close {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.6rem;
-  border: none;
-  background: transparent;
-  color: #444;
-  font-size: 1.35rem;
-  cursor: pointer;
 }
 
 .consent-banner {
