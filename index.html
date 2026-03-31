@@ -24,18 +24,29 @@
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-  <!-- Google tag (gtag.js) -->
   <script>
-    window.__GA_MEASUREMENT_ID = 'G-9TW02BVZDR';
+    window.__GA_MEASUREMENT_ID = 'G-XF8M82F4PV';
     window.__gaLoaded = false;
   </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9TW02BVZDR" onload="window.__gaLoaded=true" onerror="window.__gaLoaded=false"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
 
-    gtag('config', 'G-9TW02BVZDR');
+    const firebaseConfig = {
+      apiKey: "AIzaSyAAhOaQIGSA4O1buJYiXUfv5-Y8_P3DVlA",
+      authDomain: "ai-tu-vi-01.firebaseapp.com",
+      projectId: "ai-tu-vi-01",
+      storageBucket: "ai-tu-vi-01.firebasestorage.app",
+      messagingSenderId: "750613065492",
+      appId: "1:750613065492:web:02ee2610973d4655f71c01",
+      measurementId: "G-XF8M82F4PV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    window.__firebaseApp = app;
+    window.__firebaseAnalytics = analytics;
+    window.__gaLoaded = true;
   </script>
   <script type="application/ld+json">
   {
