@@ -1580,14 +1580,17 @@ h1, h2, h3, h4 { font-family: -apple-system, 'SF Pro Display', 'Inter', 'Segoe U
   margin-top: calc(72px + 8px);
   margin-bottom: 16px;
   max-width: 760px;
-  padding: 0.45rem 0.6rem;
-  min-height: auto;
+  padding: 0.25rem 0.45rem;
+  height: 98px;
+  overflow: hidden;
+  position: relative;
 }
 
 .ad-block-web-top .adsbygoogle {
   width: 100%;
-  height: 90px;
-  min-height: 90px;
+  height: 90px !important;
+  min-height: 90px !important;
+  max-height: 90px !important;
 }
 
 .ad-loading-placeholder {
@@ -1609,13 +1612,25 @@ h1, h2, h3, h4 { font-family: -apple-system, 'SF Pro Display', 'Inter', 'Segoe U
   display: none !important;
 }
 
+.ad-block-web-top.ad-pending .adsbygoogle {
+  display: none !important;
+}
+
 .ad-block-web-top.ad-unfilled .ad-loading-placeholder {
+  display: block;
+}
+
+.ad-block-web-top.ad-pending .ad-loading-placeholder {
   display: block;
 }
 
 .ad-block-web-top + .tab-panel .page-header {
   padding-top: 0;
   margin-top: 0;
+}
+
+.ad-block-web-top .ad-label {
+  margin-bottom: 0.25rem;
 }
 
 .consent-banner {
@@ -1679,18 +1694,24 @@ h1, h2, h3, h4 { font-family: -apple-system, 'SF Pro Display', 'Inter', 'Segoe U
 
   .ad-block-web-top {
     max-width: calc(100% - 1rem);
-    padding: 0.35rem 0.45rem;
+    padding: 0.2rem 0.35rem;
     margin-top: calc(72px + 8px);
     margin-bottom: 16px;
+    height: 78px;
   }
 
   .ad-block-web-top .adsbygoogle {
-    height: 70px;
-    min-height: 70px;
+    height: 70px !important;
+    min-height: 70px !important;
+    max-height: 70px !important;
   }
 
   .ad-loading-placeholder {
     height: 70px;
+  }
+
+  .ad-block-web-top .ad-label {
+    display: none;
   }
 
   .ad-block-web-top + .tab-panel .page-header {

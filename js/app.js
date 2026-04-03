@@ -88,6 +88,33 @@ function initAdSlots() {
   watchTopAdFillStatus();
 }
 
+function refreshAdsForTab(tabId) {
+  if (!tabId) return;
+  const selector = `.tab-panel#${tabId} .adsbygoogle[data-ad-client], .ad-block-web-top .adsbygoogle[data-ad-client]`;
+  const slots = Array.from(document.querySelectorAll(selector));
+  if (!slots.length) return;
+
+  slots.forEach((slot) => {
+    const wrap = slot.closest('.ad-block-web-top');
+    const freshSlot = slot.cloneNode(false);
+    freshSlot.removeAttribute('data-adsbygoogle-status');
+    freshSlot.removeAttribute('data-ad-status');
+    delete freshSlot.dataset.adInitialized;
+
+    if (slot.parentNode) {
+      slot.parentNode.replaceChild(freshSlot, slot);
+    }
+
+    if (wrap) {
+      wrap.classList.add('ad-pending');
+      wrap.classList.remove('ad-unfilled');
+    }
+  });
+
+  initAdSlots();
+  trackEvent('ad_refresh_on_tab_switch', { tab_name: tabId, slot_count: slots.length });
+}
+
 function watchTopAdFillStatus() {
   const topAd = document.querySelector('.ad-block-web-top .adsbygoogle');
   if (!topAd) return;
@@ -97,8 +124,10 @@ function watchTopAdFillStatus() {
   const applyStatus = () => {
     const status = topAd.getAttribute('data-ad-status');
     if (status === 'unfilled') {
+      wrap.classList.remove('ad-pending');
       wrap.classList.add('ad-unfilled');
     } else if (status === 'filled') {
+      wrap.classList.remove('ad-pending');
       wrap.classList.remove('ad-unfilled');
     }
   };
@@ -346,6 +375,7 @@ function initNavigation() {
     if (tabId === 'bang-gia') {
       trackEvent('premium_view', { source: 'tab_navigation' });
     }
+    refreshAdsForTab(tabId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
