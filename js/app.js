@@ -85,6 +85,31 @@ function initAdSlots() {
   }, { threshold: 0.2 });
 
   slotNodes.forEach((node) => observer.observe(node));
+  watchTopAdFillStatus();
+}
+
+function watchTopAdFillStatus() {
+  const topAd = document.querySelector('.ad-block-web-top .adsbygoogle');
+  if (!topAd) return;
+  const wrap = topAd.closest('.ad-block-web-top');
+  if (!wrap) return;
+
+  const applyStatus = () => {
+    const status = topAd.getAttribute('data-ad-status');
+    if (status === 'unfilled') {
+      wrap.classList.add('ad-unfilled');
+    } else if (status === 'filled') {
+      wrap.classList.remove('ad-unfilled');
+    }
+  };
+
+  applyStatus();
+  const statusObserver = new MutationObserver(applyStatus);
+  statusObserver.observe(topAd, { attributes: true, attributeFilter: ['data-ad-status'] });
+
+  // Keep fallback checks for slow ad responses.
+  window.setTimeout(applyStatus, 2500);
+  window.setTimeout(applyStatus, 5000);
 }
 
 function applyConsentMode(choice) {
@@ -112,9 +137,6 @@ function initConsentAndAds() {
     trackEvent('consent_update', { ads_consent: choice });
     loadAdsenseScript();
   };
-
-  // Always attempt to use the static AdSense script if present.
-  loadAdsenseScript();
 
   if (saved === 'granted' || saved === 'denied') {
     activate(saved);
