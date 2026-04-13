@@ -250,6 +250,24 @@
       cursor: pointer;
     }
 
+    .demo-ad-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .demo-ad-controls button {
+      border: 1px solid var(--glass-border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1f2937;
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
       .demo-grid { grid-template-columns: 1fr; }
       .local-right-rail { position: static; }
@@ -313,6 +331,15 @@
             </p>
             <div style="height:0.75rem;"></div>
             <button id="replay-loading" class="btn-submit" type="button">Chạy lại hiệu ứng loading</button>
+            <div class="demo-ad-controls">
+              <button id="show-vignette-btn" type="button">Mở popup vignette</button>
+              <button id="show-anchor-btn" type="button">Hiện anchor bottom</button>
+              <button id="hide-anchor-btn" type="button">Ẩn anchor bottom</button>
+            </div>
+            <div style="height:0.75rem;"></div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.65;">
+              Mapping production AdSense: Top = Display ad unit, Popup = Auto Ads Vignette, Bottom = Auto Ads Anchor.
+            </p>
           </div>
         </div>
       </section>
@@ -437,6 +464,7 @@
 
     var localVignette = document.getElementById("local-vignette");
     var closeVignette = document.getElementById("close-vignette");
+    var showVignetteBtn = document.getElementById("show-vignette-btn");
     var openVignetteTriggers = document.querySelectorAll("[data-show-vignette='true']");
     openVignetteTriggers.forEach(function(btn) {
       btn.addEventListener("click", function(e) {
@@ -444,6 +472,11 @@
         localVignette.classList.add("show");
       });
     });
+    if (showVignetteBtn && localVignette) {
+      showVignetteBtn.addEventListener("click", function() {
+        localVignette.classList.add("show");
+      });
+    }
     if (closeVignette) {
       closeVignette.addEventListener("click", function() {
         localVignette.classList.remove("show");
@@ -460,8 +493,20 @@
 
     var anchorAd = document.getElementById("local-anchor-ad");
     var closeAnchor = document.getElementById("close-anchor");
+    var showAnchorBtn = document.getElementById("show-anchor-btn");
+    var hideAnchorBtn = document.getElementById("hide-anchor-btn");
     if (closeAnchor && anchorAd) {
       closeAnchor.addEventListener("click", function() {
+        anchorAd.style.display = "none";
+      });
+    }
+    if (showAnchorBtn && anchorAd) {
+      showAnchorBtn.addEventListener("click", function() {
+        anchorAd.style.display = "flex";
+      });
+    }
+    if (hideAnchorBtn && anchorAd) {
+      hideAnchorBtn.addEventListener("click", function() {
         anchorAd.style.display = "none";
       });
     }

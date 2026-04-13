@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnalysisTabs();
   initConsentAndAds();
   initEngagementTracking();
+  initLandingSectionTracking();
   trackEvent('site_ready', { page_type: 'single_page_tuvi' });
 });
 
@@ -303,6 +304,48 @@ function initEngagementTracking() {
   });
 }
 
+function initLandingSectionTracking() {
+  const sections = Array.from(document.querySelectorAll('[data-track-section]'));
+  if (!sections.length) return;
+
+  const viewedSections = new Set();
+  const milestoneSections = new Set();
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const sectionName = entry.target.getAttribute('data-track-section');
+      if (!sectionName) return;
+
+      if (entry.intersectionRatio >= 0.2 && !viewedSections.has(sectionName)) {
+        viewedSections.add(sectionName);
+        trackEvent('landing_section_view', { section_name: sectionName });
+      }
+
+      if (entry.intersectionRatio >= 0.6 && !milestoneSections.has(sectionName)) {
+        milestoneSections.add(sectionName);
+        trackEvent('landing_section_scroll_milestone', {
+          section_name: sectionName,
+          depth_percent: 60
+        });
+      }
+    });
+  }, { threshold: [0.2, 0.6] });
+
+  sections.forEach((section) => sectionObserver.observe(section));
+
+  document.addEventListener('click', (e) => {
+    const cta = e.target.closest('[data-cta]');
+    if (!cta) return;
+    const ctaName = cta.getAttribute('data-cta');
+    const parent = cta.closest('[data-track-section]');
+    const sectionName = parent ? parent.getAttribute('data-track-section') : 'unknown';
+    trackEvent('landing_section_cta_click', {
+      section_name: sectionName,
+      cta_name: ctaName || 'unknown'
+    });
+  });
+}
+
 function initStarsBackground() {
   const container = document.querySelector('.stars-bg');
   if (!container) return;
@@ -537,6 +580,22 @@ function renderChart(data) {
   }
 
   const brightnessLabels = { 'M': 'M', 'V': 'V', 'Đ': 'Đ', 'B': 'B', 'H': 'H' };
+  const brightnessRank = { 'M': 1, 'V': 2, 'Đ': 3, 'B': 4, 'H': 5 };
+  const elementRank = { kim: 1, moc: 2, thuy: 3, hoa: 4, tho: 5 };
+
+  function sortStars(stars, isMajor = false) {
+    return [...stars].sort((a, b) => {
+      const ba = brightnessRank[a.brightness] || 99;
+      const bb = brightnessRank[b.brightness] || 99;
+      if (ba !== bb) return ba - bb;
+
+      const ea = elementRank[(a.element || '').toLowerCase()] || 99;
+      const eb = elementRank[(b.element || '').toLowerCase()] || 99;
+      if (!isMajor && ea !== eb) return ea - eb;
+
+      return String(a.name || '').localeCompare(String(b.name || ''), 'vi');
+    });
+  }
 
   for (let row = 1; row <= 4; row++) {
     for (let col = 1; col <= 4; col++) {
@@ -567,18 +626,21 @@ function renderChart(data) {
       if (palace.isTriet) markers += '<span class="cell-marker">Triệt</span>';
 
       // Separate major stars from auxiliary stars
-      const majorStars = palace.stars.filter(s => s.type === 'major');
-      const auxStars = palace.stars.filter(s => s.type !== 'major');
+      const majorStars = sortStars(palace.stars.filter(s => s.type === 'major'), true);
+      const auxStars = sortStars(palace.stars.filter(s => s.type !== 'major'));
 
-      function renderStar(s) {
+      function renderStar(s, showElementDot = false) {
         const elClass = s.element ? `star-el-${s.element}` : 'star-el-default';
         const isMajor = s.type === 'major';
         const bLabel = s.brightness ? ` (${brightnessLabels[s.brightness] || s.brightness})` : '';
-        return `<div class="star-text ${isMajor ? 'is-major' : ''} ${elClass}">${s.name}<span class="brightness">${bLabel}</span></div>`;
+        const dot = showElementDot ? `<span class="star-dot ${elClass}" aria-hidden="true">•</span>` : '';
+        return `<div class="star-text ${isMajor ? 'is-major' : ''} ${elClass}">${dot}${s.name}<span class="brightness">${bLabel}</span></div>`;
       }
 
-      const mainHTML = majorStars.map(renderStar).join('');
-      const auxHTML = auxStars.map(renderStar).join('');
+      const mainHTML = majorStars.length
+        ? majorStars.map((s) => renderStar(s)).join('')
+        : '<div class="star-text star-empty">Không có chính tinh</div>';
+      const auxHTML = auxStars.map((s) => renderStar(s, true)).join('');
 
       cell.innerHTML = `
         <div class="cell-header">
@@ -587,8 +649,14 @@ function renderChart(data) {
           <span class="cell-header-age">${palace.daiHan || ''}</span>
         </div>
         <div class="cell-body">
-          <div class="cell-stars-main">${mainHTML}</div>
-          <div class="cell-stars-aux">${auxHTML}</div>
+          <div class="cell-stars-main">
+            <div class="cell-stars-title">Chính tinh</div>
+            ${mainHTML}
+          </div>
+          <div class="cell-stars-aux">
+            <div class="cell-stars-title">Phụ tinh</div>
+            ${auxHTML}
+          </div>
         </div>
         <div class="cell-footer">
           <span class="cell-footer-branch">${chiName}</span>
@@ -617,23 +685,18 @@ function renderChart(data) {
   center.innerHTML = `
     <div class="center-info">
       <div class="center-title">LÁ SỐ TỬ VI</div>
+      <div class="center-subtitle">${data.name || ''} • ${data.yearName}</div>
       <table class="center-info-table">
-        <tr><td>Họ tên</td><td>${data.name || ''}</td></tr>
-        <tr><td>Năm</td><td>${data.lunarDate.year} &nbsp; ${data.yearName}</td></tr>
-        <tr><td>Tháng</td><td>${data.lunarDate.month}</td></tr>
-        <tr><td>Ngày</td><td>${data.lunarDate.day}</td></tr>
-        <tr><td>Giờ</td><td>${data.hourBranch} (${String(data.hour).padStart(2, '0')}:${birthMinute})</td></tr>
-        <tr><td>Múi giờ</td><td>${timezoneText}</td></tr>
-        <tr><td>Dương lịch (quy VN)</td><td>${solarVnText}</td></tr>
-        <tr><td>Năm xem</td><td>${data.viewYear}</td></tr>
-        <tr><td>Tháng xem</td><td>Âm lịch tháng ${data.viewMonth}</td></tr>
+        <tr><td>Năm sinh</td><td>${data.lunarDate.year}</td><td>Âm dương</td><td>${data.amDuong} ${genderText}</td></tr>
+        <tr><td>Tháng/Ngày</td><td>${data.lunarDate.month}/${data.lunarDate.day}</td><td>Giờ sinh</td><td>${data.hourBranch} (${String(data.hour).padStart(2, '0')}:${birthMinute})</td></tr>
+        <tr><td>Dương lịch</td><td>${solarVnText}</td><td>Múi giờ</td><td>${timezoneText}</td></tr>
+        <tr><td>Năm xem</td><td>${data.viewYear}</td><td>Tháng xem</td><td>Âm lịch ${data.viewMonth}</td></tr>
       </table>
-      <div class="center-extra">
-        ${data.amDuong} ${genderText}<br>
-        Mệnh: <span>${data.napAm}</span><br>
-        Cục: <span>${data.cucName}</span><br>
-        Mệnh chủ: <span>${data.menhCung}</span><br>
-        Thân chủ: <span>${data.thanCung}</span>
+      <div class="center-extra-grid">
+        <div class="center-extra-item"><span>Mệnh</span><b>${data.napAm}</b></div>
+        <div class="center-extra-item"><span>Cục</span><b>${data.cucName}</b></div>
+        <div class="center-extra-item"><span>Mệnh chủ</span><b>${data.menhCung}</b></div>
+        <div class="center-extra-item"><span>Thân chủ</span><b>${data.thanCung}</b></div>
       </div>
     </div>
   `;
